@@ -104,6 +104,9 @@ ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
 include vendor/lineage/config/lineage_sdk_common.mk
 endif
 
+# Include font files
+include vendor/lineage/config/fonts.mk
+
 # Google Photos Pixel Exclusive XML
 PRODUCT_COPY_FILES += \
     vendor/lineage/prebuilt/common/etc/sysconfig/pixel_2016_exclusive.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/pixel_2016_exclusive.xml
