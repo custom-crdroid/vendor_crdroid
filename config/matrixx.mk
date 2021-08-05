@@ -35,10 +35,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # GAPPS
 ifeq ($(WITH_GMS),true)
-$(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
-PRODUCT_PACKAGES += OtaGapps
-else
-PRODUCT_PACKAGES += OtaVanila
+$(call inherit-product, vendor/gms/products/gms.mk)
 endif
 
 # Cloned app exemption
