@@ -41,6 +41,7 @@ PRODUCT_PACKAGES += \
     GappsLauncherOverlay \
     GappsSettings \
     GappsSystemUI \
+    CustomFontPixelLauncherOverlay \
     OtaGapps
 else
 PRODUCT_PACKAGES += \
