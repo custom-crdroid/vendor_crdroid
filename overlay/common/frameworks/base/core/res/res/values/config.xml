@@ -497,9 +497,6 @@
         <item>settings_ui/bt_near_by_suggestion_enabled=true</item>
         <item>settings_ui/bt_le_audio_contact_sharing_enabled=true</item>
     </string-array>
-    
-    <!-- Flag indicating which package name can access DeviceConfig table -->
-    <string name="config_deviceConfiguratorPackageName" translatable="false">org.protonaosp.deviceconfig</string>
 
     <!-- Wallpaper cropper package. Used as the default cropper if the active launcher doesn't
          handle wallpaper cropping.
