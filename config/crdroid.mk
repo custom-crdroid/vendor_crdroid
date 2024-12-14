@@ -39,9 +39,11 @@ $(call inherit-product-if-exists, vendor/gms/products/gms.mk)
 
 PRODUCT_SYSTEM_PROPERTIES += \
      ro.crdroid.buildtype=Custom[Gapps]
+     BUILD_TYPE := Gapps
 else
 PRODUCT_SYSTEM_PROPERTIES += \
      ro.crdroid.buildtype=Custom[Vanilla]
+     BUILD_TYPE := Vanilla
 endif
 
 # Cloned app exemption
