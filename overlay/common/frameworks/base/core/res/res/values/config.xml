@@ -568,4 +568,7 @@
 
     <!-- Name of a font family to use as regular font. For theming purpose. -->
     <string name="config_regularFontFamily" translatable="false">google-sans</string>
+
+    <!-- Circle to search -->
+    <string name="config_defaultContextualSearchPackageName" translatable="false">com.google.android.googlequicksearchbox</string>
 </resources>
