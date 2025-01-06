@@ -6,7 +6,7 @@ PRODUCT_VERSION_MAJOR = 15
 PRODUCT_VERSION_MINOR = 0
 
 # Increase CR Version with each major release.
-CR_VERSION := 11.1-BETA
+CR_VERSION := 11.1-QPR
 
 # Internal version
 LINEAGE_VERSION := custom-crDroidAndroid-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(shell date +%Y%m%d)-$(LINEAGE_BUILD)-v$(CR_VERSION)-$(BUILD_TYPE)
