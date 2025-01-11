@@ -37,6 +37,14 @@ PRODUCT_PRODUCT_PROPERTIES += \
 ifeq ($(WITH_GMS),true)
 $(call inherit-product-if-exists, vendor/google/gms/config.mk)
 $(call inherit-product-if-exists, vendor/google/pixel/config.mk)
+
+PRODUCT_SYSTEM_PROPERTIES += \
+     ro.crdroid.buildtype=Custom[Gapps]
+
+else
+PRODUCT_SYSTEM_PROPERTIES += \
+     ro.crdroid.buildtype=Custom[Vanilla]
+
 endif
 
 # Cloned app exemption
