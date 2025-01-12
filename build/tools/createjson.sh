@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 
+BUILDPROP="$2/system/build.prop"
 #$1=TARGET_DEVICE, $2=PRODUCT_OUT, $3=FILE_NAME
 output=$2/$1.json
 
@@ -25,11 +26,13 @@ fi
 
 echo "Generating JSON file data for OTA support..."
 
+# Fetch Basic details
+MAINTAINER=$(grep "ro.crdroid.maintainer" "$BUILDPROP" | cut -d'=' -f2)
+OEM=$(grep "ro.product.system.manufacturer" "$BUILDPROP" | cut -d'=' -f2)
+DEVICE=$(basename "$2")
+
 # Define fields manually or leave them empty
-MAINTAINER=""
-OEM=""
-DEVICE=""
-BUILDTYPE=""
+BUILDTYPE="Monthly"
 FORUM=""
 GAPPS=""
 FIRMWARE=""
@@ -44,12 +47,14 @@ KERNEL=""
 
 # Generate JSON fields
 FILENAME=$3
-VERSION=$(echo "$3" | cut -d'-' -f5 | sed 's/v//')
-V_MAX=$(echo "$VERSION" | cut -d'.' -f1)
-V_MIN=$(echo "$VERSION" | cut -d'.' -f2)
-VERSION="$V_MAX.$V_MIN"
+VERSION=$(echo "$3" | cut -d'-' -f6 | sed 's/v//')
+IFS='.' read -r V_MAX V_MIN V_PATCH <<< "$VERSION"
+if [[ -z "$V_PATCH" ]]; then
+  VERSION="$V_MAX.$V_MIN"
+else
+  VERSION="$V_MAX.$V_MIN.$V_PATCH"
+fi
 
-BUILDPROP="$2/system/build.prop"
 TIMESTAMP=$(grep "ro.system.build.date.utc" "$BUILDPROP" | cut -d'=' -f2)
 MD5=$(md5sum "$2/$3" | cut -d' ' -f1)
 SHA256=$(sha256sum "$2/$3" | cut -d' ' -f1)
