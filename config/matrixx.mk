@@ -48,6 +48,12 @@ ifeq ($(or $(WITH_GMS),$(WITH_GMS_MINI)),true)
         GappsSettings \
         GappsSystemUI \
         CustomFontPixelLauncherOverlay
+
+    # Quick Switch (Default settings)
+    PRODUCT_SYSTEM_PROPERTIES += \
+        persist.sys.default_launcher=1 \
+        persist.sys.quickswitch_pixel_shipped=1
+
 else
     PRODUCT_PACKAGES += \
         VanilaFrameworks \
