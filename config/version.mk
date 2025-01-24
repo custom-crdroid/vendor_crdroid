@@ -8,6 +8,8 @@ MATRIXX_BUILD_TYPE ?= Test
 
 ifeq ($(WITH_GMS), true)
   MATRIXX_BUILD_VARIANT := Gapps
+else ifeq ($(WITH_GMS_MINI),true)
+  MATRIXX_BUILD_VARIANT := Core
 else
   MATRIXX_BUILD_VARIANT := Vanilla
 endif

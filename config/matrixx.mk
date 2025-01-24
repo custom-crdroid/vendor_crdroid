@@ -33,28 +33,27 @@ endif
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.launcher.blur.appLaunch=0
 
-# GAPPS
+# Inherit from GMS product config
 ifeq ($(WITH_GMS),true)
-$(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
-PRODUCT_PACKAGES += \
-    GappsFrameworks \
-    GappsLauncherOverlay \
-    GappsSettings \
-    GappsSystemUI \
-    CustomFontPixelLauncherOverlay \
-    OtaGapps
-else
-PRODUCT_PACKAGES += \
-    VanilaFrameworks \
-    VanilaLauncherOverlay \
-    VanilaSettings \
-    VanilaSystemUI \
-    OtaVanila
+    $(call inherit-product, vendor/gms/products/gms.mk)
+else ifeq ($(WITH_GMS_MINI),true)
+    $(call inherit-product, vendor/gms/products/gms_mini.mk)
+endif
 
-$(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
-PRODUCT_PACKAGES += OtaGapps
+# GAPPS
+ifeq ($(or $(WITH_GMS),$(WITH_GMS_MINI)),true)
+    PRODUCT_PACKAGES += \
+        GappsFrameworks \
+        GappsLauncherOverlay \
+        GappsSettings \
+        GappsSystemUI \
+        CustomFontPixelLauncherOverlay
 else
-PRODUCT_PACKAGES += OtaVanila
+    PRODUCT_PACKAGES += \
+        VanilaFrameworks \
+        VanilaLauncherOverlay \
+        VanilaSettings \
+        VanilaSystemUI
 endif
 
 # Cloned app exemption
