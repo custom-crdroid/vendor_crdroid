@@ -2,9 +2,9 @@ PRODUCT_VERSION_MAJOR = 15
 PRODUCT_VERSION_MINOR = 0
 
 # Increase MATRIXX Version with each major release.
-MATRIXX_VERSION := 11.1.0
+MATRIXX_VERSION := 11.1.2
 
-MATRIXX_BUILD_TYPE ?= Unofficial
+MATRIXX_BUILD_TYPE ?= Test
 
 ifeq ($(WITH_GMS), true)
   MATRIXX_BUILD_VARIANT := Gapps
@@ -33,7 +33,7 @@ LINEAGE_DISPLAY_VERSION := Matrixx-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MI
 MATRIXX_BUILD_INFO := $(LINEAGE_VERSION)
 
 # Matrixx properties
-ADDITIONAL_SYSTEM_PROPERTIES += \
+PRODUCT_SYSTEM_PROPERTIES += \
     ro.matrixx.battery?=$(MATRIXX_BATTERY) \
     ro.matrixx.build.variant=$(MATRIXX_BUILD_VARIANT) \
     ro.matrixx.build.version=$(LINEAGE_VERSION) \
