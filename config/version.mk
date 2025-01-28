@@ -2,7 +2,7 @@ PRODUCT_VERSION_MAJOR = 15
 PRODUCT_VERSION_MINOR = 0
 
 # Increase MATRIXX Version with each major release.
-MATRIXX_VERSION := 11.1.7
+MATRIXX_VERSION := 11.1.0
 
 MATRIXX_BUILD_TYPE ?= Unofficial
 
@@ -33,6 +33,7 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.matrixx.chipset?=$(MATRIXX_CHIPSET) \
     ro.matrixx.display_resolution?=$(MATRIXX_DISPLAY) \
     ro.matrixx.display.version=$(LINEAGE_DISPLAY_VERSION) \
+    ro.matrixx.maintainer=$(MATRIXX_MAINTAINER) \
     ro.matrixx.release.type=$(MATRIXX_BUILD_TYPE) \
     ro.matrixx.version=$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR) \
     ro.modversion=$(MATRIXX_VERSION)
