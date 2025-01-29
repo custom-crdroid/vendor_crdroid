@@ -37,13 +37,11 @@ PRODUCT_PRODUCT_PROPERTIES += \
 ifeq ($(WITH_GMS),true)
 $(call inherit-product, vendor/gms/products/gms.mk)
 $(call inherit-product, vendor/google/overlays/ThemeIcons/config.mk)
-endif
-
-ifeq ($(TARGET_INCLUDE_NEXUS),true)
     # Quick Switch (Default settings)
     PRODUCT_SYSTEM_PROPERTIES += \
         persist.sys.default_launcher=1 \
         persist.sys.quickswitch_pixel_shipped=1
+
 endif
 
 # Cloned app exemption
