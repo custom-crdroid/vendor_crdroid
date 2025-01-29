@@ -35,11 +35,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # GAPPS
 ifeq ($(WITH_GMS),true)
-$(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
+$(call inherit-product, vendor/gms/products/gms.mk)
 $(call inherit-product, vendor/google/overlays/ThemeIcons/config.mk)
-PRODUCT_PACKAGES += OtaGapps
-else
-PRODUCT_PACKAGES += OtaVanila
 endif
 
 # Cloned app exemption
