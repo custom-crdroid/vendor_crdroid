@@ -39,6 +39,13 @@ $(call inherit-product, vendor/gms/products/gms.mk)
 $(call inherit-product, vendor/google/overlays/ThemeIcons/config.mk)
 endif
 
+ifeq ($(TARGET_INCLUDE_NEXUS),true)
+    # Quick Switch (Default settings)
+    PRODUCT_SYSTEM_PROPERTIES += \
+        persist.sys.default_launcher=1 \
+        persist.sys.quickswitch_pixel_shipped=1
+endif
+
 # Cloned app exemption
 PRODUCT_COPY_FILES += \
     vendor/lineage/prebuilt/common/etc/sysconfig/preinstalled-packages-platform-crdroid-product.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/preinstalled-packages-platform-crdroid-product.xml \
