@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Copyright (C) 2019-2025 crDroid Android Project
+# Copyright (C) 2024-25 Matrixx Android Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
-# You may not use this file except in compliance with the License.
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
@@ -15,89 +15,65 @@
 # limitations under the License.
 #
 
-#$1=TARGET_DEVICE, $2=PRODUCT_OUT, $3=FILE_NAME
-existingOTAjson=./vendor/crDroidOTA/$1.json
-output=$2/$1.json
+#$1=TARGET_DEVICE, $2=PRODUCT_OUT, $3=LINEAGE_VERSION
+existingOTAjson=./vendor/MatrixxOTA/$1.json
+output=./vendor/MatrixxOTA/$1.json
 
-# Cleanup old file
-if [ -f $output ]; then
-    rm $output
+buildprop=$2/system/build.prop
+
+if [ -f "$existingOTAjson" ]; then
+    # Get data from already existing device JSON
+    maintainer=$(grep -n "\"maintainer\"" "$existingOTAjson" | cut -d ":" -f 3 | sed 's/"//g' | sed 's/,//g' | xargs)
+    oem=$(grep -n "\"oem\"" "$existingOTAjson" | cut -d ":" -f 3 | sed 's/"//g' | xargs)
+    device=$(grep -n "\"device\"" "$existingOTAjson" | cut -d ":" -f 3 | sed 's/"//g' | xargs)
+else
+    # Fetch Basic details from build.prop if JSON doesn't exist
+    maintainer=$(grep "ro.matrixx.maintainer" "$BUILDPROP" | cut -d'=' -f2 | xargs)
+    oem=$(grep "ro.product.system.manufacturer" "$BUILDPROP" | cut -d'=' -f2 | xargs)
+    device=$(basename "$2")
 fi
 
-echo "Generating JSON file data for OTA support..."
+filename=$3
+download="https://sourceforge.net/projects/projectmatrixx/files/Android-15/$1/$filename/download"
+linenr=$(grep -n "ro.system.build.date.utc" "$buildprop" | cut -d':' -f1)
+timestamp=$(sed -n "$linenr"p < "$buildprop" | cut -d'=' -f2)
+md5=$(md5sum "$2/$3" | cut -d' ' -f1)
+size=$(stat -c "%s" "$2/$3")
 
-# Helper function to extract field from JSON
-extract_field() {
-    grep "\"$1\":" "$existingOTAjson" | sed -n "s/.*\"$1\": *\"\([^\"]*\)\".*/\1/p" | xargs
-}
-
-if [ -f $existingOTAjson ]; then
-    # Extract fields from existing JSON or leave empty
-    MAINTAINER=$(extract_field "maintainer")
-    OEM=$(extract_field "oem")
-    DEVICE=$(extract_field "device")
-    BUILDTYPE=$(extract_field "buildtype")
-    FORUM=$(extract_field "forum")
-    GAPPS=$(extract_field "gapps")
-    FIRMWARE=$(extract_field "firmware")
-    MODEM=$(extract_field "modem")
-    BOOTLOADER=$(extract_field "bootloader")
-    RECOVERY=$(extract_field "recovery")
-    PAYPAL=$(extract_field "paypal")
-    TELEGRAM=$(extract_field "telegram")
-    DT=$(extract_field "dt")
-    COMMON_DT=$(extract_field "common-dt")
-    KERNEL=$(extract_field "kernel")
+#Get version
+VERSION=$(echo "$3" | cut -d'-' -f6 | sed 's/v//')
+IFS='.' read -r V_MAX V_MIN V_PATCH <<< "$VERSION"
+if [[ -z "$V_PATCH" ]]; then
+  VERSION="$V_MAX.$V_MIN"
+else
+  VERSION="$V_MAX.$V_MIN.$V_PATCH"
 fi
 
-# Generate JSON fields
-FILENAME=$3
-VERSION=$(echo "$3" | cut -d'-' -f5 | sed 's/v//')
-V_MAX=$(echo "$VERSION" | cut -d'.' -f1)
-V_MIN=$(echo "$VERSION" | cut -d'.' -f2)
-VERSION="$V_MAX.$V_MIN"
+	#cleanup old file
+	if [ -f $output ]; then
+        	rm $output
+	fi
 
-BUILDPROP="$2/system/build.prop"
-TIMESTAMP=$(grep "ro.system.build.date.utc" "$BUILDPROP" | cut -d'=' -f2)
-MD5=$(md5sum "$2/$3" | cut -d' ' -f1)
-SHA256=$(sha256sum "$2/$3" | cut -d' ' -f1)
-SIZE=$(stat -c "%s" "$2/$3")
+	echo '{
+  "response": [
+    {
+        "maintainer": "'$maintainer'",
+        "oem": "'$oem'",
+        "device": "'$device'",
+        "filename": "'$filename'",
+        "download": "'$download'",
+        "timestamp": '$timestamp',
+        "md5": "'$md5'",
+        "size": '$size',
+        "version": "'$version'"
+    }
+  ]
+}' >> $output
 
-# Generate JSON output
-cat <<EOF >$output
-{
-    "response": [
-        {
-            "maintainer": "${MAINTAINER:-}",
-            "oem": "${OEM:-}",
-            "device": "${DEVICE:-}",
-            "filename": "$FILENAME",
-            "download": "https://sourceforge.net/projects/crdroid/files/$1/$V_MAX.x/$3/download",
-            "timestamp": $TIMESTAMP,
-            "md5": "$MD5",
-            "sha256": "$SHA256",
-            "size": $SIZE,
-            "version": "$VERSION",
-            "buildtype": "${BUILDTYPE:-}",
-            "forum": "${FORUM:-}",
-            "gapps": "${GAPPS:-}",
-            "firmware": "${FIRMWARE:-}",
-            "modem": "${MODEM:-}",
-            "bootloader": "${BOOTLOADER:-}",
-            "recovery": "${RECOVERY:-}",
-            "paypal": "${PAYPAL:-}",
-            "telegram": "${TELEGRAM:-}",
-            "dt": "${DT:-}",
-            "common-dt": "${COMMON_DT:-}",
-            "kernel": "${KERNEL:-}"
-        }
-    ]
-}
-EOF
-
-if [ ! -f $existingOTAjson ]; then
-    echo "There is no official support for this device yet"
-    echo "Consider adding official support by reading the documentation at https://github.com/crdroidandroid/android_vendor_crDroidOTA/blob/15.0/README.md"
+        echo "vendor/MatrixxOTA/$1.json"
+else
+	#if not already supported, create dummy file with info in it on how to
+	echo 'There is no official support for this device yet' >> $output;
 fi
 
-echo "JSON file generation completed"
+echo ""
